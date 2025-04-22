@@ -1,8 +1,11 @@
+import { useEffect } from 'react'
 import routes, { renderRoutes } from '@src/modules/shared/routes'
-import { useAppSelector } from '@src/modules/shared/store'
+import { useAppDispatch, useAppSelector } from '@src/modules/shared/store'
 import { Helmet } from 'react-helmet-async'
 import { useTranslation } from 'react-i18next'
-import { QueryClient, QueryClientProvider } from 'react-query'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
+import { login } from '@src/modules/auth/data/authThunk'
 
 const App = () => {
   const queryClient = new QueryClient()
@@ -10,6 +13,12 @@ const App = () => {
   document.body.dir = i18n?.dir()
 
   const theme = useAppSelector((state) => state.theme.mode)
+  const dispatch = useAppDispatch()
+
+  // 👇 Vérifie si un utilisateur est connecté
+  useEffect(() => {
+    dispatch(login())
+  }, [])
 
   return (
     <div id={theme}>

@@ -2,8 +2,10 @@
 import UniverseWrapper from '@src/modules/shared/layout/UniverseWrapper'
 import { Fragment, lazy } from 'react'
 import { RouteProps, Navigate } from 'react-router-dom'
-import GuestGuard from '../../shared/guards/GuestGuard'
-import { PATH } from './paths'
+
+import AuthGuard from '@src/modules/shared/guards/AuthGuard'
+import { PATH } from '@src/modules/auth/routes/paths'
+import MainLayout from '@src/modules/shared/layout/MainLayout/MainLayout'
 
 type RouteConfig = {
   exact: boolean | null
@@ -15,16 +17,11 @@ type RouteConfig = {
 
 const routes: RouteConfig[] = [
   {
-    path: '/',
     exact: true,
-    component: () => <Navigate to={PATH.LOGIN} replace />,
-  },
-  {
-    exact: true,
-    guard: GuestGuard,
-    path: PATH.LOGIN,
-    component: lazy(() => import('../features/Login/Login')),
-    layout: (props: any) => <UniverseWrapper {...props} />,
+    guard: AuthGuard,
+    path: PATH.REPOSITORIES,
+    component: lazy(() => import('../index')),
+    layout: MainLayout,
   },
 ]
 

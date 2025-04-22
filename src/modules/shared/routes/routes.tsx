@@ -1,9 +1,6 @@
 import sharedRoutes from './sharedRoutes'
 import authRoutes from '../../auth/routes/routes'
-
-const routes = [
-  ...sharedRoutes,
-  ...authRoutes
-]
+import repositoriesRoutes from '../../repositories/routes/routes'
+const routes = [...sharedRoutes, ...authRoutes, ...repositoriesRoutes]
 
 export default routes
