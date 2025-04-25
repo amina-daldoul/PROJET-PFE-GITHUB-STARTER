@@ -3,9 +3,13 @@ import axios from 'axios'
 import { Collapse } from 'antd'
 import './PullRequests.css'
 
+import { fetchPublicPullRequest } from './api'
+import { useQuery } from '@tanstack/react-query'
+import LoadingScreen from '../shared/components/Loading'
+
 const { Panel } = Collapse
 
-interface IPullRequest {
+interface PullRequest {
   id: number
   number: number
   title: string
@@ -19,37 +23,17 @@ interface IPullRequest {
   body?: string
 }
 
-const PullRequestList = ({ user, repo, token }: { user: string; repo: string; token: string }) => {
-  const [pullRequests, setPullRequests] = useState<IPullRequest[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    const fetchPRs = async () => {
-      try {
-        const url = `https://api.github.com/repos/${user}/${repo}/pulls?state=all`
-        const headers = token ? { Authorization: `Bearer ${token}` } : {}
-        const response = await axios.get<IPullRequest[]>(url, { headers })
-        setPullRequests(response.data)
-      } catch (err: any) {
-        setError(
-          err.response?.status === 404 ? `Dépôt "${repo}" introuvable` : 'Erreur de chargement'
-        )
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchPRs()
-  }, [user, repo, token])
-
-  if (loading) return <div className="pr-loading">Chargement en cours...</div>
-  if (error) return <div className="pr-error">{error}</div>
-  if (pullRequests.length === 0) return <div className="pr-empty">Aucune pull request trouvée</div>
+const PullRequestList = ({ user, repo}: { user: string; repo: string}) => {
+  const { data:pullRequests, isLoading ,error }= useQuery({queryKey:["pullrequest"],queryFn:()=>fetchPublicPullRequest(user ,repo)})
+  
+console.log({pullRequests})
+  if (isLoading) return <LoadingScreen size="full" blur/>
+  
+  if ( pullRequests?.length && pullRequests?.length === 0) return <div className="pr-empty">Aucune pull request trouvée</div>
 
   return (
     <Collapse accordion className="pr-main-collapse" expandIconPosition="end">
-      {pullRequests.map((pr) => (
+      {pullRequests?.map((pr) => (
         <Panel
           key={pr.id}
           header={
