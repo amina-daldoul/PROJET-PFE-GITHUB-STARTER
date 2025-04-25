@@ -23,6 +23,13 @@ const routes: RouteConfig[] = [
     component: lazy(() => import('../index')),
     layout: MainLayout,
   },
+  {
+    exact: true,
+    guard: AuthGuard,
+    path: PATH.REPOSITORIES + '/:owner/:repo/pulls',
+    component: lazy(() => import('@src/modules/PullRequests/PullRequestPage')),
+    layout: MainLayout,
+  },
 ]
 
 export default routes
