@@ -10,25 +10,19 @@ const { Panel } = Collapse
 
 const PullRequestPage = () => {
   const { owner, repo } = useParams<{ owner: string; repo: string }>()
-  
 
   return (
     <MainContainer
       linkProps={{
         title: 'PROJET-PFE-GITHUB-STARTER',
         links: [
-          { name: 'Repositories', href: PATH.REPOSITORIES},
+          { name: 'Repositories', href: PATH.REPOSITORIES },
 
           { name: 'Pull Requests', href: '/' },
         ],
       }}
     >
-      
-
-      
-        <PullRequestList user={owner!} repo={repo!}  />
-     
-      
+      <PullRequestList user={owner!} repo={repo!} />
     </MainContainer>
   )
 }

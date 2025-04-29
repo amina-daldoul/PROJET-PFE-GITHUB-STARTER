@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import { Collapse } from 'antd'
 import './PullRequests.css'
-
+import CommitsList from './CommitsList';
 import { fetchPublicPullRequest } from './api'
 import { useQuery } from '@tanstack/react-query'
 import LoadingScreen from '../shared/components/Loading'
@@ -19,17 +19,21 @@ interface PullRequest {
     avatar_url: string
   }
   created_at: string
+ 
   state: 'open' | 'closed'
   body?: string
 }
 
-const PullRequestList = ({ user, repo}: { user: string; repo: string}) => {
-  const { data:pullRequests, isLoading ,error }= useQuery({queryKey:["pullrequest"],queryFn:()=>fetchPublicPullRequest(user ,repo)})
-  
-console.log({pullRequests})
-  if (isLoading) return <LoadingScreen size="full" blur/>
-  
-  if ( pullRequests?.length && pullRequests?.length === 0) return <div className="pr-empty">Aucune pull request trouvée</div>
+const PullRequestList = ({ user, repo }: { user: string; repo: string }) => {
+  const {
+    data: pullRequests,
+    isLoading,
+    error,
+  } = useQuery({ queryKey: ['pullrequest'], queryFn: () => fetchPublicPullRequest(user, repo) })
+
+  if (isLoading) return <LoadingScreen size="full" blur />
+  if (pullRequests?.length === 0)
+    return <div className="pr-empty">Aucune pull request trouvée</div>
 
   return (
     <Collapse accordion className="pr-main-collapse" expandIconPosition="end">
@@ -38,10 +42,18 @@ console.log({pullRequests})
           key={pr.id}
           header={
             <div className="pr-header">
-              <span className={`pr-state pr-state-${pr.state}`}>#{pr.number}</span>
-              <span className="pr-title">{pr.title}</span>
-              <span className="pr-user">@{pr.user.login}</span>
-              <span className="pr-date">{new Date(pr.created_at).toLocaleDateString()}</span>
+              <div className="pr-left">
+                <span className={`pr-state pr-state-${pr.state}`}>#{pr.number}</span>
+                <span className="pr-title">{pr.title}</span>
+                <span className="pr-user">@{pr.user.login}</span>
+              </div>
+              <div className="pr-right">
+                <div className="pr-status-box">
+                  <span className="pr-status">{pr.state === 'open' ? 'Open' : 'Closed'}</span>
+                  <span className="pr-status-icon">✅</span>
+                </div>
+                <span className="pr-date">Updated at : {new Date(pr.created_at).toLocaleString()}</span>
+              </div>
             </div>
           }
           className="pr-item"
@@ -53,9 +65,8 @@ console.log({pullRequests})
                 <p>{pr.body}</p>
               </div>
             )}
-            <a href={pr.html_url} target="_blank" rel="noopener noreferrer" className="pr-link">
-              Voir sur GitHub
-            </a>
+            
+            <CommitsList user={user} repo={repo} prNumber={pr.number} />
           </div>
         </Panel>
       ))}
