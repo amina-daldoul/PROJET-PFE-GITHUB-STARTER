@@ -6,6 +6,7 @@ import { useAppSelector } from '../shared/store'
 import LoadingScreen from '../shared/components/Loading'
 import { useNavigate } from 'react-router-dom'
 import { useEffect } from 'react' // Ajouté pour le debogage
+import MainContainer from '../shared/layout/MainContainer/MainContainer'
 
 const Repositories = () => {
   const { user } = useAppSelector((state) => state.auth)
@@ -44,27 +45,33 @@ const Repositories = () => {
   if (error) return <NoData title="Failed to load public repositories" />
 
   return (
-    <div className="repositories-container">
-      {repositories?.length ? (
-        repositories.map((repo, index) => (
-          <CardSkew
-            key={repo.id}
-            autoColors={index + 1}
-            onClick={() => handleRepositoryClick(repo)} // Modifié
-          >
-            <div className="project-card-content">
-              <h1 className="project-title">{repo.name}</h1>
-              <p className="project-description">{repo.description}</p>
-              <div className="button-container">
-                <button className="public-button">Public</button>
+    <MainContainer
+      linkProps={{
+        title: 'Repositories',
+        links: [{ name: 'Repositories', href: '' }],
+      }}
+    >
+      <div className="repositories-container">
+        {repositories?.length ? (
+          repositories.map((repo, index) => (
+            <CardSkew
+              key={repo.id}
+              autoColors={index + 1}
+              onClick={() => handleRepositoryClick(repo)} // Modifié
+            >
+              <div className="project-card-content">
+                <h1 className="project-title">{repo.name}</h1>
+                <div className="button-container">
+                  <button className="public-button">Public</button>
+                </div>
               </div>
-            </div>
-          </CardSkew>
-        ))
-      ) : (
-        <NoData title="No Public Projects Found" />
-      )}
-    </div>
+            </CardSkew>
+          ))
+        ) : (
+          <NoData title="No Public Projects Found" />
+        )}
+      </div>
+    </MainContainer>
   )
 }
 

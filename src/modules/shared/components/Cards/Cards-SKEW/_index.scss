@@ -172,10 +172,14 @@
 }
 
 .project-title {
-  font-size: 1.8rem;
-  font-weight: bold;
+  font-size: 1.2rem;
+  font-weight: 600;
   margin-bottom: 15px;
   color: #fff;
+  max-width: 10rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 // pour le boutton
 .button-container {

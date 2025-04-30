@@ -1,28 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios'
-import { Collapse } from 'antd'
-import './PullRequests.css'
-import CommitsList from './CommitsList';
-import { fetchPublicPullRequest } from './api'
 import { useQuery } from '@tanstack/react-query'
+import { Collapse } from 'antd'
 import LoadingScreen from '../shared/components/Loading'
+import CommitsList from './CommitsList'
+import { fetchPublicPullRequest } from './api/api'
 
 const { Panel } = Collapse
-
-interface PullRequest {
-  id: number
-  number: number
-  title: string
-  html_url: string
-  user: {
-    login: string
-    avatar_url: string
-  }
-  created_at: string
- 
-  state: 'open' | 'closed'
-  body?: string
-}
 
 const PullRequestList = ({ user, repo }: { user: string; repo: string }) => {
   const {
@@ -32,8 +14,7 @@ const PullRequestList = ({ user, repo }: { user: string; repo: string }) => {
   } = useQuery({ queryKey: ['pullrequest'], queryFn: () => fetchPublicPullRequest(user, repo) })
 
   if (isLoading) return <LoadingScreen size="full" blur />
-  if (pullRequests?.length === 0)
-    return <div className="pr-empty">Aucune pull request trouvée</div>
+  if (pullRequests?.length === 0) return <div className="pr-empty">Aucune pull request trouvée</div>
 
   return (
     <Collapse accordion className="pr-main-collapse" expandIconPosition="end">
@@ -52,7 +33,9 @@ const PullRequestList = ({ user, repo }: { user: string; repo: string }) => {
                   <span className="pr-status">{pr.state === 'open' ? 'Open' : 'Closed'}</span>
                   <span className="pr-status-icon">✅</span>
                 </div>
-                <span className="pr-date">Updated at : {new Date(pr.created_at).toLocaleString()}</span>
+                <span className="pr-date">
+                  Updated at : {new Date(pr.created_at).toLocaleString()}
+                </span>
               </div>
             </div>
           }
@@ -65,7 +48,7 @@ const PullRequestList = ({ user, repo }: { user: string; repo: string }) => {
                 <p>{pr.body}</p>
               </div>
             )}
-            
+
             <CommitsList user={user} repo={repo} prNumber={pr.number} />
           </div>
         </Panel>

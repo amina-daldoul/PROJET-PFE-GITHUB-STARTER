@@ -86,7 +86,8 @@
     gap: 0.5rem;
   }
 
-  .pr-left, .pr-right {
+  .pr-left,
+  .pr-right {
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: flex-start;
