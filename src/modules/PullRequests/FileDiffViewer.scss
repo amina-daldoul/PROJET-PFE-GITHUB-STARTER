@@ -1,0 +1,60 @@
+.diff-viewer {
+    margin-top: 1rem;
+    border-radius: 0.5rem;
+    overflow: auto;
+    background-color: #1c1c1c;
+    color: #e6edf3;
+
+    .d2h-wrapper {
+        width: 100%;
+        /* animation: enter 0.3s ease-in-out; */ /* Définissez cette animation si vous l'utilisez */
+    }
+
+    .d2h-file-list-wrapper {
+        display: none;
+    }
+
+    * {
+        line-height: 1.6;
+    }
+
+    .d2h-del {
+        background-color: rgba(253, 0, 46, 0.3) !important;
+    }
+
+    .d2h-ins {
+        background-color: rgba(181, 255, 8, 0.3) !important;
+    }
+
+    .d2h-cntx {
+        background-color: rgba(70, 185, 242, 0.15) !important;
+    }
+
+    .d2h-side-by-side {
+        display: flex;
+
+        .d2h-code-line {
+            padding: 0.25rem 0.75rem;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            white-space: pre-wrap;
+            word-break: break-word;
+            font-family: monospace;
+        }
+
+        .d2h-diff-linenumber {
+            background-color: #2a2a2a;
+            color: #8b949e;
+            padding: 0.25rem 0.5rem;
+            font-size: 0.875rem;
+            line-height: 1.5;
+            text-align: right;
+            width: 50px;
+        }
+
+        .d2h-code-line-ctn {
+            flex-grow: 1;
+            border-left: 1px solid #2a2a2a;
+        }
+    }
+}

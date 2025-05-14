@@ -1,50 +1,51 @@
-import { useQuery } from '@tanstack/react-query'
-import { fetchCommitsForPR } from './api/api'
-import LoadingScreen from '../shared/components/Loading'
+import { useQuery } from '@tanstack/react-query';
+import { fetchCommitsForPR } from './api/api';
+import LoadingScreen from '../shared/components/Loading';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Importez useNavigate
+import './CommitsList.scss';
 
 interface Props {
-  user: string
-  repo: string
-  prNumber: number
+    user: string;
+    repo: string;
+    prNumber: number;
 }
 
-const CommitsList: React.FC<Props> = ({
-  user,
-  repo,
-  prNumber,
-}: {
-  user: string
-  repo: string
-  prNumber: number
-}) => {
-  const {
-    data: commits,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ['commits', user, repo, prNumber],
-    queryFn: () => fetchCommitsForPR(user, repo, prNumber),
-  })
+const CommitsList: React.FC<Props> = ({ user, repo, prNumber }) => {
+    const [selectedSha, setSelectedSha] = useState<string | null>(null);
+    const navigate = useNavigate(); // Initialisez useNavigate
 
-  if (isLoading) return <LoadingScreen size="s" />
-  if (error) return <p className="commits-error">Échec du chargement des commits.</p>
+    const { data: commits, isLoading, error } = useQuery({
+        queryKey: ['commits', user, repo, prNumber],
+        queryFn: () => fetchCommitsForPR(user, repo, prNumber),
+    });
 
-  return (
-    <div className="commits-section">
-      <span className="commits-list-label">Commits List :</span>
-      {commits?.map((c) => (
-        <div key={c.sha} className="commit-item">
-          <img src={c.author?.avatar_url} alt="avatar" className="commit-avatar" />
-          <div className="commit-info">
-            <div className="commit-message">{c.commit.message}</div>
-            <div className="commit-date">
-              Created at: {new Date(c.commit.author.date).toLocaleString()}
+    const handleCommitClick = (sha: string) => {
+        setSelectedSha(sha);
+        navigate(`/repositories/${user}/${repo}/commits/${sha}`); // Redirigez vers la nouvelle page
+    };
+
+    if (isLoading) return <LoadingScreen />;
+    if (error) return <p>Échec du chargement des commits.</p>;
+
+    return (
+        <div className="commits-page">
+            <div className="commits-list-section">
+                <span className="commits-list-label">Commits List :</span>
+                {commits?.map((c) => (
+                    <div key={c.sha} className={`commit-item ${selectedSha === c.sha ? 'selected' : ''}`} onClick={() => handleCommitClick(c.sha)}>
+                        <img src={c.author?.avatar_url} alt="Avatar" className="commit-avatar" />
+                        <div className="commit-info">
+                            <span className="commit-message">{c.commit.message}</span>
+                            <span className="commit-date">
+                                Created at: {new Date(c.commit.author.date).toLocaleString()}
+                            </span>
+                        </div>
+                    </div>
+                ))}
             </div>
-          </div>
         </div>
-      ))}
-    </div>
-  )
-}
+    );
+};
 
-export default CommitsList
+export default CommitsList;

@@ -1,0 +1,46 @@
+.commit-files-section {
+    h3 {
+        color: #e6edf3;
+        margin-bottom: 0.75rem;
+    }
+}
+
+.commit-files-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.commit-file-item {
+    background: #2a2a2a;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    margin-bottom: 0.25rem;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.2s ease-in-out;
+
+    &:hover {
+        background: #333;
+    }
+
+    .filename {
+        color: #e6edf3;
+        flex-grow: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .additions {
+        color: #3fb950;
+        margin-left: 0.5rem;
+    }
+
+    .deletions {
+        color: #f85149;
+        margin-left: 0.5rem;
+    }
+}

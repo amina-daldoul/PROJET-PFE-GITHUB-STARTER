@@ -7,11 +7,10 @@ import { fetchPublicPullRequest } from './api/api'
 const { Panel } = Collapse
 
 const PullRequestList = ({ user, repo }: { user: string; repo: string }) => {
-  const {
-    data: pullRequests,
-    isLoading,
-    error,
-  } = useQuery({ queryKey: ['pullrequest'], queryFn: () => fetchPublicPullRequest(user, repo) })
+  const { data: pullRequests, isLoading } = useQuery({
+    queryKey: ['pullrequest', user, repo],
+    queryFn: () => fetchPublicPullRequest(user, repo),
+  })
 
   if (isLoading) return <LoadingScreen size="full" blur />
   if (pullRequests?.length === 0) return <div className="pr-empty">Aucune pull request trouvée</div>
@@ -29,28 +28,14 @@ const PullRequestList = ({ user, repo }: { user: string; repo: string }) => {
                 <span className="pr-user">@{pr.user.login}</span>
               </div>
               <div className="pr-right">
-                <div className="pr-status-box">
-                  <span className="pr-status">{pr.state === 'open' ? 'Open' : 'Closed'}</span>
-                  <span className="pr-status-icon">✅</span>
-                </div>
-                <span className="pr-date">
-                  Updated at : {new Date(pr.created_at).toLocaleString()}
-                </span>
+                <span className="pr-date">Updated at : {new Date(pr.created_at).toLocaleString()}</span>
               </div>
             </div>
           }
           className="pr-item"
         >
-          <div className="pr-content">
-            {pr.body && (
-              <div className="pr-description">
-                <h4>Description</h4>
-                <p>{pr.body}</p>
-              </div>
-            )}
-
-            <CommitsList user={user} repo={repo} prNumber={pr.number} />
-          </div>
+          {pr.body && <div className="pr-description"><h4>Description</h4><p>{pr.body}</p></div>}
+          <CommitsList user={user} repo={repo} prNumber={pr.number} />
         </Panel>
       ))}
     </Collapse>

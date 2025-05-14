@@ -30,6 +30,14 @@ const routes: RouteConfig[] = [
     component: lazy(() => import('@src/modules/PullRequests/PullRequestPage')),
     layout: MainLayout,
   },
-]
+  {
+    exact: true,
+    guard: AuthGuard,
+    path: PATH.REPOSITORIES + '/:owner/:repo/commits/:sha', // Nouvelle route pour les détails du commit
+    component: lazy(() => import('@src/modules/PullRequests/CommitDetailPage')), // Créez ce composant
+    layout: MainLayout,
+},
+];
+  
 
 export default routes
