@@ -1,10 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import UniverseWrapper from '@src/modules/shared/layout/UniverseWrapper'
 import { Fragment, lazy } from 'react'
-import { RouteProps, Navigate } from 'react-router-dom'
+import { RouteProps } from 'react-router-dom'
 
-import AuthGuard from '@src/modules/shared/guards/AuthGuard'
 import { PATH } from '@src/modules/auth/routes/paths'
+import AuthGuard from '@src/modules/shared/guards/AuthGuard'
 import MainLayout from '@src/modules/shared/layout/MainLayout/MainLayout'
 
 type RouteConfig = {
@@ -19,15 +18,8 @@ const routes: RouteConfig[] = [
   {
     exact: true,
     guard: AuthGuard,
-    path: PATH.REPOSITORIES,
-    component: lazy(() => import('../index')),
-    layout: MainLayout,
-  },
-  {
-    exact: true,
-    guard: AuthGuard,
-    path: PATH.PULLREQUESTS,
-    component: lazy(() => import('@src/modules/PullRequests/PullRequestPage')),
+    path: PATH.FilesChanges,
+    component: lazy(() => import('..')),
     layout: MainLayout,
   },
 ]
