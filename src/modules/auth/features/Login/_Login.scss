@@ -21,3 +21,27 @@
     }
   }
 }
+.card-balance-loginbtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 12px 24px;
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  font-weight: 500;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.card-balance-loginbtn:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.card-balance-loginbtn-icon {
+  font-size: 1.2rem;
+}

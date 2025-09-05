@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import GuestLayout from '@src/modules/shared/layout/GuestLayout/GuestLayout'
+import UniverseWrapper from '@src/modules/shared/layout/UniverseWrapper'
 import { Fragment, lazy } from 'react'
-import { RouteProps } from 'react-router-dom'
+import { RouteProps, Navigate } from 'react-router-dom'
 import GuestGuard from '../../shared/guards/GuestGuard'
 import { PATH } from './paths'
 
@@ -15,11 +15,16 @@ type RouteConfig = {
 
 const routes: RouteConfig[] = [
   {
+    path: '/',
+    exact: true,
+    component: () => <Navigate to={PATH.LOGIN} replace />,
+  },
+  {
     exact: true,
     guard: GuestGuard,
     path: PATH.LOGIN,
     component: lazy(() => import('../features/Login/Login')),
-    layout: GuestLayout,
+    layout: (props: any) => <UniverseWrapper {...props} />,
   },
 ]
 
